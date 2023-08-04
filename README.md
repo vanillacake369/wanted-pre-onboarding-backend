@@ -9,9 +9,8 @@
 > * 실행환경 : Java & Spring Boot
 > * 사용한 데이터베이스 : MySQL
 1. 해당 프로젝트를 import
-2. `database` 패키지 내에 `create_table.sql` 파일을 통해 데이터베이스 테이블 생성
-3. database 포트 확인하여 `src 패키지` > `application.yml 파일`에서 PORT 번호 수정 및 확인
-4. **1-f RESTful API 명세표**에 따라 엔드포인트 호출 
+2. database 포트 확인하여 `src 패키지` > `application.yml 파일`에서 PORT 번호 수정 및 확인
+3. **1-f RESTful API 명세표**에 따라 엔드포인트 호출 
 
 ### 1-c. 데이터베이스 테이블 구조
 

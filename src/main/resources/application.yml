@@ -1,6 +1,31 @@
+# SERVER CONFIG
+server:
+  address: localhost
+  port: 8080
+
 spring:
-  .datasource:
-    .url = spring.datasource.url=jdbc:mysql://localhost:3306/[DB????]?autoReconnect=true
-    .username=[DB??Id]
-    .password=[DB??Password]
-    .driver-class-name=com.mysql.jdbc.Driver
+  # DB CONNECTION
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/wanted?serverTimezone=Asia/Seoul
+    username: root
+    password: 1026baby
+
+  # JPA
+  jpa:
+    hibernate:
+      ddl-auto: create
+      # ONLY FOR DEV, LOCAL
+      # BEST PRACTICE = DIRECT QUERY TO SERVER DB
+    properties:
+      hibernate:
+        show_sql: true
+#        format_sql: true
+        use_sql_comments: true
+    defer-datasource-initialization: true
+
+# LOGGING LEVEL
+logging:
+  level:
+    org:
+      hibernate: info
