@@ -7,6 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 
+import java.util.Optional;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @SpringBootTest
@@ -17,11 +19,21 @@ public class PostRepositoryTest {
 
 
     @Test
-    @DisplayName("Can I connect to MySQL ?")
+    @DisplayName("CRUD Test on PostRepository")
     public void testIfConfigWork(){
-        Post savedPost = postRepository.save(new Post(1l, "cont"));
+        // GIVEN
+        long id = 1l;
+        String contents = "memo";
+        postRepository.save(new Post(id,contents));
+
+        // WHEN
+        Post savedPost = postRepository.findById(1l).stream().findFirst().orElse(null);
+
+        // THEN
+        assertEquals(savedPost.getClass(),Post.class);
+        assertEquals(savedPost.getId(),id);
+        assertEquals(savedPost.getContents(),contents);
         System.out.println(savedPost.toString());
-        assertEquals(savedPost.getId(), 1l);
     }
 
 }

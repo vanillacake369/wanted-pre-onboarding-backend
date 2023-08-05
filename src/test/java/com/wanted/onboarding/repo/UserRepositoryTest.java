@@ -1,12 +1,14 @@
 package com.wanted.onboarding.repo;
 
+import com.wanted.onboarding.entity.Post;
 import com.wanted.onboarding.entity.User;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @SpringBootTest
 @ActiveProfiles("mysql_test")
@@ -15,20 +17,22 @@ public class UserRepositoryTest {
     private UserRepository userRepository;
 
     @Test
-    @DisplayName("Email Validation")
-    public void testEmailValidation() throws Exception{
-        /* GIVEN */
-        User unvalid = User.builder().email("worng email").password("random pw").build();
+    @DisplayName("CRUD Test on UserRepository")
+    public void testIfConfigWork(){
+        // GIVEN
+        long id = 1l;
+        String email = "rand@rand.com";
+        String pw = "newPw";
+        userRepository.save(User.builder().email(email).password(pw).build());
 
-        /* THEN :: EXPECTED EXCEPTION */
-        Exception exception = Assertions.assertThrows(Exception.class, () -> {
-            /* WHEN */
-            userRepository.save(unvalid);
-        });
+        // WHEN
+        User savedUser = userRepository.findById(1l).stream().findFirst().orElse(null);
 
-        /* THEN :: EXPECTED EXCEPTION MESSAGES */
-        org.assertj.core.api.Assertions.assertThat(exception).isInstanceOf(Exception.class);
-        System.out.println(exception.getMessage());
-
+        // THEN
+        assertEquals(savedUser.getClass(),Post.class);
+        assertEquals(savedUser.getId(),id);
+        assertEquals(savedUser.getEmail(),email);
+        assertEquals(savedUser.getPassword(),pw);
+        System.out.println(savedUser.toString());
     }
 }
