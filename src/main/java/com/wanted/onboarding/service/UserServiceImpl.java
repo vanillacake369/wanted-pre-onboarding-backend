@@ -3,14 +3,15 @@ package com.wanted.onboarding.service;
 
 import com.wanted.onboarding.entity.User;
 import com.wanted.onboarding.exception.UserNotFoundException;
-import com.wanted.onboarding.model.UserService;
 import com.wanted.onboarding.repo.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
-
 
 @Service
 @RequiredArgsConstructor
@@ -18,12 +19,28 @@ public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
 
+    private final BCryptPasswordEncoder passwordEncoder;
+
     @Override
-    public User saveUser(User user) {
+    public User registerNewUserAccount(User user) {
+        // Existing User Validation
         List<User> savedUsers = userRepository.findMemberByEmail(user.getEmail());
         if(!savedUsers.isEmpty()){
             throw new UserNotFoundException(String.format("Employee already exist with given email: [%s]",user.getEmail()));
         }
-        return userRepository.save(user);
+
+        // Encryption
+        User encryptedUser = getEncryptedUser(user);
+
+        // Save to Repo
+        return userRepository.save(encryptedUser);
+    }
+
+    protected User getEncryptedUser(User user) {
+        User encryptedUser = User.builder()
+                .email(user.getEmail())
+                .password(passwordEncoder.encode(user.getPassword()))
+                .build();
+        return encryptedUser;
     }
 }

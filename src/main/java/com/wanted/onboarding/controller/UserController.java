@@ -22,7 +22,6 @@ public class UserController {
 
     @PostMapping("/signup")
     public User signUp(@RequestBody User freshUser){
-//        User freshUser = User.builder().email(email).password(password).build();
-        return userService.saveUser(freshUser);
+        return userService.registerNewUserAccount(freshUser);
     }
 }

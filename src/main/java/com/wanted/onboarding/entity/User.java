@@ -3,6 +3,7 @@ package com.wanted.onboarding.entity;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import lombok.*;
+import org.hibernate.validator.constraints.Length;
 
 import java.util.regex.Pattern;
 
@@ -23,5 +24,6 @@ public class User {
     private String email;
 
     @Column(nullable = false)
+    @Length(min = 8)
     private String password;
 }
