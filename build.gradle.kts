@@ -27,12 +27,12 @@ dependencies {
 	implementation("org.springframework.boot:spring-boot-starter-data-jdbc")
 	implementation("org.springframework.boot:spring-boot-starter-validation")
 	implementation("org.springframework.boot:spring-boot-starter-security")
-	implementation("org.springframework.boot:spring-boot-starter-thymeleaf")
+	implementation ("io.jsonwebtoken:jjwt-api:0.11.5") // Use the appropriate version
+	implementation ("io.jsonwebtoken:jjwt-impl:0.11.5") // Use the same version as jjwt-api
 	implementation("org.springframework.boot:spring-boot-starter-web")
 	implementation("org.springframework.session:spring-session-core")
-	implementation("org.thymeleaf.extras:thymeleaf-extras-springsecurity6")
 	implementation("org.springframework.boot:spring-boot-starter-data-jpa")
-	testImplementation("junit:junit:4.13.1")
+	testImplementation("junit:junit:4.13.2")
 	compileOnly("org.projectlombok:lombok")
 	developmentOnly("org.springframework.boot:spring-boot-devtools")
 	annotationProcessor("org.projectlombok:lombok")

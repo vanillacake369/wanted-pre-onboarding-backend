@@ -1,5 +1,7 @@
 package com.wanted.onboarding.service;
 
+import com.wanted.onboarding.dto.SignRequestDto;
+import com.wanted.onboarding.dto.SignResponseDto;
 import com.wanted.onboarding.entity.User;
 import com.wanted.onboarding.repo.UserRepository;
 import org.junit.jupiter.api.Assertions;
@@ -7,7 +9,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.context.ActiveProfiles;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -22,14 +24,21 @@ public class UserServiceImplTest {
     private UserRepository userRepository;
     @Autowired
     private UserServiceImpl userServiceImpl;
+    @Autowired
+    PasswordEncoder passwordEncoder;
 
     @Test
     @DisplayName("Test for saving user by inserting random user entity")
     void registerNewUserAccountTest() {
         // GIVEN
-        User randomUser = new User(1l, "eamil@susp.com", "idontknowpw");
+        String email = "eamil@susp.com";
+        String password = "idontknowpw";
+        SignRequestDto signRequestDto = SignRequestDto.builder()
+                .email(email)
+                .password(password)
+                .build();
         // WHEN
-        userServiceImpl.registerNewUserAccount(randomUser);
+        userServiceImpl.signUpNewUser(signRequestDto);
         // THEN
         assertEquals(userRepository.findById(1l).isPresent(),true);
     }
@@ -54,47 +63,17 @@ public class UserServiceImplTest {
     }
 
     @Test
-    @DisplayName("Check if password has more than 8 chars")
-    void checkMinLengthOfPassword(){
-
-        // GIVEN
-        String email = "hello@gmail.com";
-        String password = "onetwo";
-        User unvalid = User.builder()
-                .email(email)
-                .password(password)
-                .build();
-
-
-        /* THEN :: EXPECTED EXCEPTION */
-        Exception exception = Assertions.assertThrows(Exception.class, () -> {
-            /* WHEN */
-            userRepository.save(unvalid);
-        });
-
-        /* THEN :: EXPECTED EXCEPTION MESSAGES */
-        assertThat(exception).isInstanceOf(Exception.class);
-        System.out.println("exception message : "+exception.getMessage());
-
-    }
-    @Test
     @DisplayName("Check if password has encrypted")
     void getEncryptedUserTest(){
 
         // GIVEN
-        String email = "hello@gmail.com";
-        String password = "random password";
-        User fresh = User.builder()
-                .email(email)
-                .password(password)
-                .build();
+        String rawPassword = "randomPassword**123";
 
         // WHEN
-        User encryptedUser = userServiceImpl.getEncryptedUser(fresh);
+        String encodedPassword = passwordEncoder.encode(rawPassword);
 
         // THEN
-        assertNotEquals(encryptedUser.getPassword(),password);
-        System.out.println("encryptedUser.getPassword() : "+encryptedUser.getPassword());
-        System.out.println("password : "+password);
+        assertNotEquals(rawPassword,encodedPassword);
+        assertTrue(passwordEncoder.matches(rawPassword,encodedPassword));
     }
 }

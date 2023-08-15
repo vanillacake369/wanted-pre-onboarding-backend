@@ -1,11 +1,8 @@
 package com.wanted.onboarding.entity;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Email;
 import lombok.*;
-import org.hibernate.validator.constraints.Length;
-
-import java.util.regex.Pattern;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 @Getter // getter 메소드 생성
 @Builder // 빌더를 사용할 수 있게 함
@@ -19,11 +16,13 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
-    @Email(regexp = "[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,3}")
+    @Column(nullable = false, unique = true)
     private String email;
 
     @Column(nullable = false)
-    @Length(min = 8)
     private String password;
+
+    public void encodePassword(PasswordEncoder passwordEncoder){
+        this.password = passwordEncoder.encode(password);
+    }
 }

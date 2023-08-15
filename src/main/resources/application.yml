@@ -1,3 +1,8 @@
+# SECURITY
+jwt:
+  secret:
+    key: jihoonZ2LUB5HMOe9Lt3jSwnhYK61UiDW8nK9Fm7mn6VQHj9lzunksfsb2NoUAHOED2uwvstNSpMY6Xits7i6iYdlK5iCLFMAW1qDjDANTBey9hW7VQtk1eoXBfNEIQYAz4pRGisarSeVEF5x9uBt9QFSDRFon44jirdjh0fX70eI72WntEjVPRvijzVcDqLyf3WuohRG4gEdmc3WW6yJPLiibchXA9IUb04arg8QPt1PiNtyqYmmloziooMQ9UJ
+
 # SERVER CONFIG
 server:
   address: localhost
@@ -20,12 +25,16 @@ spring:
     properties:
       hibernate:
         show_sql: true
-#        format_sql: true
         use_sql_comments: true
     defer-datasource-initialization: true
+
 
 # LOGGING LEVEL
 logging:
   level:
     org:
+      springframework:
+        security:
+          crypto:
+            password: WARN
       hibernate: info
