@@ -19,7 +19,7 @@ public class PrincipalDetails implements UserDetails {
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         Collection<GrantedAuthority> collet = new ArrayList<GrantedAuthority>();
-        collet.add(()->{ return String.valueOf(user.getRole());});
+        collet.add(()-> String.valueOf(user.getRole()));
         return collet;
     }
 

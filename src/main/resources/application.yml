@@ -19,9 +19,9 @@ spring:
   # JPA
   jpa:
     hibernate:
-      ddl-auto: create
       # ONLY FOR DEV, LOCAL
-      # BEST PRACTICE = DIRECT QUERY TO SERVER DB
+      # ddl-auto: create, update
+      ddl-auto: update
     properties:
       hibernate:
         show_sql: true

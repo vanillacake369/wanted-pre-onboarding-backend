@@ -3,6 +3,8 @@ package com.wanted.onboarding.controller;
 import com.wanted.onboarding.dto.SignRequestDto;
 import com.wanted.onboarding.dto.SignResponseDto;
 import com.wanted.onboarding.service.UserServiceImpl;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -26,16 +28,6 @@ public class FormLoginController {
         return "admin page";
     }
 
-    @GetMapping("/signIn")
-    public @ResponseBody String signIn(){
-        return "Logged In !!";
-    }
-
-    @GetMapping("/signOut")
-    public @ResponseBody String signOut(){
-        return "Logged Out";
-    }
-
     @Secured("ROLE_MANAGER")
     @GetMapping("/manager")
     public @ResponseBody String manager(){
@@ -47,13 +39,18 @@ public class FormLoginController {
         return userService.findUserByEmail(emailAddr);
     }
 
-    @PostMapping("/user/signup")
+    @PostMapping("/signup")
     public ResponseEntity<SignResponseDto> signUp(@RequestBody @Valid SignRequestDto signRequestDto) throws Exception{
         return new ResponseEntity<>(userService.signUp(signRequestDto), HttpStatus.OK);
     }
 
-    @PostMapping("/user/signin")
+    @PostMapping("/signin")
     public ResponseEntity<Boolean> signIn(@RequestBody SignRequestDto signRequestDto) throws Exception{
         return new ResponseEntity<>(userService.signIn(signRequestDto), HttpStatus.OK);
+    }
+
+    @GetMapping("/user/signout")
+    public ResponseEntity<Boolean> signOut(HttpServletRequest req, HttpServletResponse res) throws Exception{
+        return new ResponseEntity<>(userService.signOut(req,res), HttpStatus.OK);
     }
 }

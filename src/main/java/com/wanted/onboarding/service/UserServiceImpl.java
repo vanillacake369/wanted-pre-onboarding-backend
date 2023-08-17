@@ -8,6 +8,9 @@ import com.wanted.onboarding.entity.Role;
 import com.wanted.onboarding.entity.User;
 import com.wanted.onboarding.exception.UserNotFoundException;
 import com.wanted.onboarding.repo.UserRepository;
+import io.jsonwebtoken.impl.lang.UnavailableImplementationException;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -16,8 +19,10 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.stereotype.Service;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -62,6 +67,17 @@ public class UserServiceImpl implements UserService {
         SecurityContextHolder.getContext().setAuthentication(authenticate);
 
         return true;
+    }
+
+    public Boolean signOut(HttpServletRequest req, HttpServletResponse res) throws Exception {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        if(auth != null){
+            new SecurityContextLogoutHandler().logout(req, res, auth);
+            // SecurityContextHolder.clearContext();
+            return true;
+        }else {
+            throw new IllegalStateException("User had not signed in");
+        }
     }
 
     /* Authentication */

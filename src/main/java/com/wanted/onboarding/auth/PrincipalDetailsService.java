@@ -3,14 +3,17 @@ package com.wanted.onboarding.auth;
 import com.wanted.onboarding.entity.User;
 import com.wanted.onboarding.repo.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.stereotype.Service;
 
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.Set;
 
 
@@ -26,23 +29,21 @@ public class PrincipalDetailsService implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
 
-        System.out.println("email : "+email);
-
         User savedUser = userRepository.findUserByEmail(email).orElseThrow(()->
                 new UsernameNotFoundException(String.format("[%s] of user not found " ,email))
         );
 
         // #1
-        //  Set< GrantedAuthority> authorities = Collections.singleton(new SimpleGrantedAuthority(savedUser.getRole().getRole()));
-        // #2
-        //  Set<GrantedAuthority> authorities = user
-        //                .getRoles()
-        //                .stream()
-        //                .map((role) -> new SimpleGrantedAuthority(role.getName())).collect(Collectors.toSet());
+        Set<GrantedAuthority> authorities = new HashSet<>();
+        String roleName = savedUser.getRole().getRole();
+        authorities.add(new SimpleGrantedAuthority(roleName));
+
+        // LOG
+        System.out.println("email : "+email);
+        System.out.println("roleName : "+roleName);
 
         // #1 & #2
-        // return new org.springframework.security.core.userdetails.User(savedUser.getEmail(), savedUser.getPassword(),authorities);
-
-        return new PrincipalDetails(savedUser);
+        return new org.springframework.security.core.userdetails.User(savedUser.getEmail(), savedUser.getPassword(),authorities);
+        // return new PrincipalDetails(savedUser);
     }
 }

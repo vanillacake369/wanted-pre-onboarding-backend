@@ -55,10 +55,10 @@ public class FormSecurityConfig {
                 /* URI VALIDATION */
                 .authorizeHttpRequests(authCustomizer ->
                         authCustomizer
-                                .requestMatchers("/form","/form/","/form/users").permitAll()
-                                .requestMatchers("/form/user/**").permitAll()
-                                .requestMatchers("/form/manager/**").hasRole("MANAGER")
                                 .requestMatchers("/form/admin/**").hasRole("ADMIN")
+                                .requestMatchers("/form/manager/**").hasRole("MANAGER")
+                                .requestMatchers("/form/user/**","/form/user").hasRole("USER")
+                                .requestMatchers("/form","/form/","/form/users","/form/signin","/form/signup").permitAll()
                                 .anyRequest().authenticated()
                 );
 //

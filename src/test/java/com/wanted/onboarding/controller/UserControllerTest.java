@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -47,5 +48,27 @@ public class UserControllerTest {
         " \n\"password\": \"short\"}")
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isBadRequest());
+    }
+    @Test
+    @DisplayName("Authorize after sign in")
+    @WithMockUser(username = "1026baby@naver.com",password =  "mynameiskim123**", roles = "USER")
+    void check_authorization() throws Exception {
+        this.mockMvc.perform(get("/form/user")
+                        .param("emailAddr","1026baby@naver.com")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    @DisplayName("Logged out user should not be authorized to user page")
+    @WithMockUser(username = "1026baby@naver.com",password =  "mynameiskim123**", roles = "USER")
+    void check_signout() throws Exception {
+        this.mockMvc.perform(get("/form/user/signout"))
+                .andExpect(status().isOk());
+
+        this.mockMvc.perform(get("/form/user")
+                        .param("emailAddr","1026baby@naver.com")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isForbidden());
     }
 }
