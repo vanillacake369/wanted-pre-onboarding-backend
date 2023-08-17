@@ -20,11 +20,4 @@ public class SignRequestDto {
     @NotBlank(message = "Enter the password")
     @Size(min = 8,message = "password should have at least 8 characters")
     private String password;
-
-    public User getEntity(){
-        return User.builder()
-                .email(email)
-                .password(password)
-                .build();
-    }
 }

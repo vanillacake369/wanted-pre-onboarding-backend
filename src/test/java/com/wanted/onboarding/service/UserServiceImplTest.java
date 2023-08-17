@@ -1,7 +1,6 @@
 package com.wanted.onboarding.service;
 
 import com.wanted.onboarding.dto.SignRequestDto;
-import com.wanted.onboarding.dto.SignResponseDto;
 import com.wanted.onboarding.entity.User;
 import com.wanted.onboarding.repo.UserRepository;
 import org.junit.jupiter.api.Assertions;
@@ -29,7 +28,7 @@ public class UserServiceImplTest {
 
     @Test
     @DisplayName("Test for saving user by inserting random user entity")
-    void registerNewUserAccountTest() {
+    void registerNewUserAccountTest() throws Exception {
         // GIVEN
         String email = "eamil@susp.com";
         String password = "idontknowpw";
@@ -38,7 +37,7 @@ public class UserServiceImplTest {
                 .password(password)
                 .build();
         // WHEN
-        userServiceImpl.signUpNewUser(signRequestDto);
+        userServiceImpl.signUp(signRequestDto);
         // THEN
         assertEquals(userRepository.findById(1l).isPresent(),true);
     }

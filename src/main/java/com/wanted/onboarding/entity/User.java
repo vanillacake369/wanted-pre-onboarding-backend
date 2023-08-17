@@ -1,14 +1,17 @@
 package com.wanted.onboarding.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.CreationTimestamp;
 import org.springframework.security.crypto.password.PasswordEncoder;
+
+import java.sql.Timestamp;
 
 @Getter // getter 메소드 생성
 @Builder // 빌더를 사용할 수 있게 함
 @AllArgsConstructor
 @NoArgsConstructor
-
 @Entity
 @Table(name="users")
 public class User {
@@ -20,9 +23,11 @@ public class User {
     private String email;
 
     @Column(nullable = false)
+    @JsonIgnore
     private String password;
 
-    public void encodePassword(PasswordEncoder passwordEncoder){
-        this.password = passwordEncoder.encode(password);
-    }
+    @CreationTimestamp
+    private Timestamp createdTime;
+
+    private Role role;
 }

@@ -3,20 +3,17 @@ package com.wanted.onboarding.service;
 
 import com.wanted.onboarding.dto.SignRequestDto;
 import com.wanted.onboarding.dto.SignResponseDto;
-import com.wanted.onboarding.entity.User;
-import com.wanted.onboarding.exception.UserNotFoundException;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
 public interface UserService {
     /* Get Users by email addr */
-    User findUserByEmail(String email) throws UserNotFoundException;
+    SignResponseDto findUserByEmail(String email) throws Exception;
     /* Authentication */
-    UserDetails loadUserByEmail(String email) throws UsernameNotFoundException;
+    UserDetails loadUserByEmail(String email) throws Exception;
     /* Sign Up */
-    SignResponseDto signUpNewUser(SignRequestDto user) throws UserNotFoundException;
+    SignResponseDto signUp(SignRequestDto user) throws Exception;
     /* Sign In */
-    SignResponseDto signIn(SignRequestDto user) throws UserNotFoundException;
+    Boolean signIn(SignRequestDto user) throws Exception;
 
 
 

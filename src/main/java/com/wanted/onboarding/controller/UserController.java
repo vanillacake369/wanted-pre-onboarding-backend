@@ -20,29 +20,31 @@ public class UserController {
     private final UserRepository userRepository;
     private final UserServiceImpl userService;
 
-    @GetMapping("/helloworld")
-    public String getHelloWorld(){
-        return "hello world";
+
+    @GetMapping("/hi")
+    public String hello(){
+        return "hi";
     }
 
+    /* ADMIN ONLY */
     @GetMapping("/users")
     public List<User> findAllUsers(){
-        return userRepository.findAll();
+        return userService.findAllUsers();
     }
 
     @GetMapping("/user")
-    public User findByEmail(@PathVariable String emailAddr){
+    public SignResponseDto findByEmail(@RequestParam String emailAddr) throws Exception {
         return userService.findUserByEmail(emailAddr);
     }
 
     @PostMapping("/signup")
     public ResponseEntity<SignResponseDto> signUp(@RequestBody @Valid SignRequestDto signRequestDto) throws Exception{
-        return new ResponseEntity<>(userService.signUpNewUser(signRequestDto), HttpStatus.OK);
+        return new ResponseEntity<>(userService.signUp(signRequestDto), HttpStatus.OK);
     }
 
     @PostMapping("/login")
-    public ResponseEntity<SignResponseDto> signIn(@RequestBody @Valid SignRequestDto signRequestDto) throws Exception{
-        return new ResponseEntity<>(userService.signUpNewUser(signRequestDto), HttpStatus.OK);
+    public boolean signIn(@RequestBody @Valid SignRequestDto signRequestDto) throws Exception{
+        return userService.signIn(signRequestDto);
     }
 
 

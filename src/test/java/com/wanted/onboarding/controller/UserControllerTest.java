@@ -1,6 +1,7 @@
 package com.wanted.onboarding.controller;
 
 import com.wanted.onboarding.dto.SignRequestDto;
+import org.aspectj.lang.annotation.Before;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,9 +22,9 @@ public class UserControllerTest {
     private MockMvc mockMvc;
 
     @Test
-    @DisplayName("Success when more than 8 passwords")
+    @DisplayName("Successful Signup")
     void create_success() throws Exception {
-        this.mockMvc.perform(post("/posts")
+        this.mockMvc.perform(post("/v1/signup")
                         .content("{\"email\": \"randommail@google.com\"," +
                                 " \n\"password\": \"long_enough_password\"}")
                         .contentType(MediaType.APPLICATION_JSON))
@@ -34,16 +35,16 @@ public class UserControllerTest {
     @DisplayName("Get all the users")
     void getAllUsers() throws Exception {
         this.mockMvc.perform(
-                get("/users"))
+        get("/users"))
                 .andExpect(status().isOk());
     }
 
     @Test
-    @DisplayName("Success when more than 8 passwords")
+    @DisplayName("Invalid Signup")
     void create_fail() throws Exception {
-        this.mockMvc.perform(post("/posts")
+        this.mockMvc.perform(post("/v1/signup")
                         .content("{\"email\": \"randommail@google.com\"," +
-                                " \n\"password\": \"short\"}")
+        " \n\"password\": \"short\"}")
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isBadRequest());
     }
